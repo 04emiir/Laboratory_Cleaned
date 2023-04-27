@@ -22,10 +22,9 @@ public class LaboratoryInputs : MonoBehaviour {
     Vector3 velocity, angularVelocity, aceleracion, angularAceleracion, velocityG, angularVelocityG, aceleracionG, angularAceleracionG, posicion, posicionG;
     private Vector2 primary2DAxis;
     Quaternion rotacion, rotacionG;
-    Vector3 leftEyePosition, rightEyePosition, leftEyeVelocity, rightEyeVelocity, centerEyePos, centerEyeVel;
-    Quaternion rightEyeRotation, leftEyeRotation, centerEyeRotation;
+    Vector3 leftEyePosition, rightEyePosition, centerEyePos;
 
-    public Toggle speedHeadsetToggler, buttonAToggler, joystickToggler;
+    public Toggle speedHeadsetToggler, buttonToggler, joystickToggler;
     public TextMeshProUGUI speedHeadset, contButtons, joystick, tabletTextMesh;
 
 
@@ -33,7 +32,6 @@ public class LaboratoryInputs : MonoBehaviour {
         detectedDevices = new List<UnityEngine.XR.InputDevice>();
         UnityEngine.XR.InputDevices.GetDevices(detectedDevices);
         screenIsOn = false;
-        tabletIsOn = false;
     }
 
     void Update() {
@@ -56,7 +54,7 @@ public class LaboratoryInputs : MonoBehaviour {
     public void ShowDevices() {
         var texto = "";
         foreach (var device in detectedDevices) {
-            texto += (string.Format("\n Device found with name '{0}' and role '{1}'", device.name, device.role.ToString()));
+            texto += (string.Format("Device name: '{0}' and rol: '{1}. '", device.name, device.characteristics.ToString()));
         }
         infoTextMesh.text = texto;
     }
@@ -70,7 +68,7 @@ public class LaboratoryInputs : MonoBehaviour {
             var texto = "";
             foreach (var feature in inputFeatures)
             {
-                texto += (string.Format("\n Feature{0}", feature.name));
+                texto += (string.Format("Features: {0}. ", feature.name));
             }
             infoTextMesh.text = texto;
         }
@@ -80,10 +78,6 @@ public class LaboratoryInputs : MonoBehaviour {
         screenIsOn = !screenIsOn;
     }
 
-    public void TurnOnTablet()
-    {
-        tabletIsOn = !tabletIsOn;
-    }
 
     public void isOnDevices() {
         if (speedHeadsetToggler.isOn)
@@ -91,9 +85,9 @@ public class LaboratoryInputs : MonoBehaviour {
         else
             speedHeadset.text = "";
 
-        if (buttonAToggler.isOn) {
-            contButtons.text = "Finger on button A; " + primaryTouch + " button pressed: " + primaryButton;
-            contButtons.text = "Finger on button B; " + secondaryTouch + " button pressed: " + secondaryButton;
+        if (buttonToggler.isOn) {
+            contButtons.text = "Finger on button A? " + primaryTouch + ". Is button pressed: " + primaryButton;
+            contButtons.text += "Finger on button B? " + secondaryTouch + ". Is button pressed: " + secondaryButton;
         } else {
             contButtons.text = "";
         }
@@ -103,10 +97,7 @@ public class LaboratoryInputs : MonoBehaviour {
         else
             joystick.text = "";
 
-        if (tabletIsOn)
-            tabletTextMesh.text = " controller placement:" + posicion + " rotation " + rotacion +  " controller speed " + velocity;
-        else
-            tabletTextMesh.text = "";
+        tabletTextMesh.text = " controller placement:" + posicion + " rotation " + rotacion +  " controller speed " + velocity;
     }
 
     public void GetControllerValues() {
@@ -137,13 +128,7 @@ public class LaboratoryInputs : MonoBehaviour {
         detectedDevices[0].TryGetFeatureValue(UnityEngine.XR.CommonUsages.userPresence, out userPresence);
         detectedDevices[0].TryGetFeatureValue(UnityEngine.XR.CommonUsages.leftEyePosition, out leftEyePosition);
         detectedDevices[0].TryGetFeatureValue(UnityEngine.XR.CommonUsages.rightEyePosition, out rightEyePosition);
-        detectedDevices[0].TryGetFeatureValue(UnityEngine.XR.CommonUsages.leftEyeRotation, out leftEyeRotation);
-        detectedDevices[0].TryGetFeatureValue(UnityEngine.XR.CommonUsages.rightEyeRotation, out rightEyeRotation);
-        detectedDevices[0].TryGetFeatureValue(UnityEngine.XR.CommonUsages.leftEyeVelocity, out leftEyeVelocity);
-        detectedDevices[0].TryGetFeatureValue(UnityEngine.XR.CommonUsages.rightEyeVelocity, out rightEyeVelocity);
         detectedDevices[0].TryGetFeatureValue(UnityEngine.XR.CommonUsages.centerEyePosition, out centerEyePos);
-        detectedDevices[0].TryGetFeatureValue(UnityEngine.XR.CommonUsages.centerEyeRotation, out centerEyeRotation);
-        detectedDevices[0].TryGetFeatureValue(UnityEngine.XR.CommonUsages.centerEyeVelocity, out centerEyeVel);
     }
 
     public void GetHeadsetTransforms() {
@@ -172,12 +157,6 @@ public class LaboratoryInputs : MonoBehaviour {
         rightScreenTextMesh.text += "\n acel " + aceleracion + "a. aceleration " + angularAceleracion;
 
         leftScreenTextMesh.text = "Inputs headset. headset is on " + userPresence;
-        leftScreenTextMesh.text += "\n Posicion del ojo Izquierdo " + leftEyePosition + "Rotacion" + leftEyeRotation;
-        leftScreenTextMesh.text += "\n Velocidad ojo Izquierdo " + leftEyeVelocity;
-        leftScreenTextMesh.text += "\n Posicion del ojo Derecho " + rightEyePosition + "Rotacion" + rightEyeRotation;
-        leftScreenTextMesh.text += "\n Velocidad ojo Derrecho " + rightEyeVelocity;
-        leftScreenTextMesh.text += "\n Posicion del ojo Central " + centerEyePos + "Rotacion" + centerEyeRotation;
-        leftScreenTextMesh.text += "\n Velocidad ojo Central " + centerEyeVel;
         leftScreenTextMesh.text += "\n Dispositivo trackeado " + isTrackedG;
         leftScreenTextMesh.text += "\n Posiocion " + posicionG + " Rotacion " + rotacionG;
         leftScreenTextMesh.text += "\n speed " + velocityG + "a speed " + angularVelocityG;
