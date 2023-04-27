@@ -26,13 +26,14 @@ public class LaboratoryInputs : MonoBehaviour {
     Quaternion rightEyeRotation, leftEyeRotation, centerEyeRotation;
 
     public Toggle speedHeadsetToggler, buttonAToggler, joystickToggler;
-    public TextMeshProUGUI speedHeadset, botonA, joystick, tabletTextMesh;
+    public TextMeshProUGUI speedHeadset, contButtons, joystick, tabletTextMesh;
 
 
     void Start() {
         detectedDevices = new List<UnityEngine.XR.InputDevice>();
         UnityEngine.XR.InputDevices.GetDevices(detectedDevices);
-        screenIsOn = tabletIsOn = false;
+        screenIsOn = false;
+        tabletIsOn = false;
     }
 
     void Update() {
@@ -90,10 +91,12 @@ public class LaboratoryInputs : MonoBehaviour {
         else
             speedHeadset.text = "";
 
-        if (buttonAToggler.isOn)
-            botonA.text = "Finger on button; " + primaryTouch + " button pressed: " + primaryButton;
-        else
-            botonA.text = "";
+        if (buttonAToggler.isOn) {
+            contButtons.text = "Finger on button A; " + primaryTouch + " button pressed: " + primaryButton;
+            contButtons.text = "Finger on button B; " + secondaryTouch + " button pressed: " + secondaryButton;
+        } else {
+            contButtons.text = "";
+        }
 
         if (joystickToggler.isOn)
             joystick.text = "finger on bumper: " + primary2DAxistouch + " joystick pressed: " + primary2DAxisclick + " joystick movement " + primary2DAxis;
@@ -155,7 +158,7 @@ public class LaboratoryInputs : MonoBehaviour {
 
     public void WriteOnScreens() {
         rightScreenTextMesh.text = "Input right controller is moving bumper" + primary2DAxis;
-        rightScreenTextMesh.text += "\n trgiger pressed " + triggerValue + triggersensi;
+        rightScreenTextMesh.text += "\n trigger pressed " + triggerValue + triggersensi;
         rightScreenTextMesh.text += "\n a is pressed " + primaryButton;
         rightScreenTextMesh.text += "\n b is pressed " + secondaryButton;
         rightScreenTextMesh.text += "\n finger over a " + primaryTouch;
